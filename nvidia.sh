@@ -7,3 +7,4 @@ sudo apt-get -y install cuda-drivers
 echo 'PATH=/usr/local/cuda-11.8/bin${PATH:+:$PATH}' >> ~/.profile
 echo 'LD_LIBRARY_PATH=/usr/local/cuda-11.8/lib64\${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}' >> ~/.profile
 print after reboot, run \"cat /proc/driver/nvidia/version\"
+source ~/.profile
