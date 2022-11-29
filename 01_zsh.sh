@@ -6,3 +6,4 @@ sudo curl -fsSL  https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/do
 sudo chmod +x /usr/bin/oh-my-posh
 cp .zshrc ~/.zshrc
 cp gmay_mine.omp-ec2.json ~/.oh-my-zsh/gmay_mine.omp.json
+sudo chsh -s /bin/zsh ubuntu
