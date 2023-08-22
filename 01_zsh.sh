@@ -4,6 +4,7 @@ wget https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -O awscliv2.zip
 unzip -qq awscliv2.zip
 sudo ./aws/install -i /usr/bin/awscli
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+git clone https://github.com/tmux-plugins/tmux-yank ~/.tmux/plugins/tmux-yank
 cp tmux.conf ~/.tmux.conf
 curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh | sh
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
