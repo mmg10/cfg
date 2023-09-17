@@ -1,5 +1,5 @@
 sudo apt update
-sudo apt install git zsh unzip xclip tmux nfs-common -y
+sudo apt install git zsh unzip xclip xsel tmux nfs-common -y
 wget https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -O awscliv2.zip
 unzip -qq awscliv2.zip
 sudo ./aws/install -i /usr/bin/awscli

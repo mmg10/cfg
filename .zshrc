@@ -110,14 +110,20 @@ export PATH=$PATH:/home/ubuntu/.local/bin
 # For a full list of active aliases, run `alias`.
 #
 
-
+alias l="ls -sAh"
 alias pip="mypip"
 alias upd="sudo apt update; sudo apt upgrade"
 alias sgedit="sudo gedit"
 alias ven="venf"
 alias gitaa="gitaaf"
 alias gitcc="gitccf"
+alias yb='yt-dlp -f 22 -o '\''%(title)s.%(ext)s'\'
+alias ypb='yt-dlp -f 22 -o '\''%(playlist_index)02d - %(title)s.%(ext)s'\'
+alias ydb='yt-dlp --write-description -f 22 -o '\''%(upload_date)s - %(title)s.%(ext)s'\'
 
+alias y='yt-dlp --write-description -f 22 -o '\''%(title)s.%(ext)s'\'
+alias yd='yt-dlp --write-description -f 22 -o '\''%(upload_date)s - %(title)s.%(ext)s'\'
+alias yp='yt-dlp --write-description -f 22 -o '\''%(playlist_index)02d - %(title)s.%(ext)s'\'
 
 function mypip() {
     #do things with parameters like $1 such as
