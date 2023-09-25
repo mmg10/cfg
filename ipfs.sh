@@ -31,4 +31,3 @@ EOF
 sudo systemctl daemon-reload
 sudo systemctl enable ipfs.service
 sudo systemctl start ipfs
-sudo systemctl status ipfs
