@@ -179,5 +179,30 @@ function gitaaf() {
     fi
 }
 
+function rname(){
+    rename "s/${1}/${2}/g" *
+}
+
+function duration(){
+    for file in *.(mp4|mkv)(N); do
+        echo -n $(ffprobe $file 2>&1 | grep 'Duration' | cut -d',' -f1 | cut -d' ' -f4 | cut -d'.' -f1)
+        echo " $(ls -sh $file)"
+    done
+}
+
+function compress(){
+    i=1
+    for file in *.*; do
+        echo "compressing $file"
+        tar -cf out/$i.tar "$file"
+        i=$((i+1))
+    done
+}
+
+function vcomp(){
+    for file in *.mp4; do
+        ffmpeg -i "$f" -loglevel warning -hide_banner -stats -vcodec libx265 -acodec copy out/"${f%.mp4}_.mp4";
+    done
+}
 
 eval "$(oh-my-posh --init --shell zsh --config ~/.oh-my-zsh/gmay_mine.omp.json)"

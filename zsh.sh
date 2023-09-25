@@ -1,5 +1,5 @@
 sudo apt update
-sudo apt install git zsh unzip xclip xsel tmux nfs-common -y
+sudo apt install git zsh unzip xclip xsel tmux rename nfs-common -y
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 git clone https://github.com/tmux-plugins/tmux-yank ~/.tmux/plugins/tmux-yank
 cp tmux.conf ~/.tmux.conf
