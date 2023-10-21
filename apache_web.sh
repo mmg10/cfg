@@ -41,6 +41,6 @@ sed -i 's/Listen 80/Listen 6789/' /etc/apache2/ports.conf
 
 # Restart Apache
 systemctl restart apache2
-
+sudo chown ubuntu . -R
 echo "Apache is now listening on port 6789. You can place your files in /var/www/html/downloads."
 

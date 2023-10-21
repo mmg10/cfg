@@ -119,7 +119,7 @@ alias gitaa="gitaaf"
 alias gitcc="gitccf"
 alias yb='yt-dlp -f 22 -o '\''%(title)s.%(ext)s'\'
 alias ypb='yt-dlp -f 22 -o '\''%(playlist_index)02d - %(title)s.%(ext)s'\'
-alias ydb='yt-dlp --write-description -f 22 -o '\''%(upload_date)s - %(title)s.%(ext)s'\'
+alias ydb='yt-dlp -f 22 -o '\''%(upload_date)s - %(title)s.%(ext)s'\'
 
 alias y='yt-dlp --write-description -f 22 -o '\''%(title)s.%(ext)s'\'
 alias yd='yt-dlp --write-description -f 22 -o '\''%(upload_date)s - %(title)s.%(ext)s'\'
