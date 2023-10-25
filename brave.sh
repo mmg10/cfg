@@ -4,3 +4,4 @@ echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] http
 sudo apt update
 sudo apt install -y brave-browser
 sudo sed -i 's:/usr/bin/brave-browser-stable %U:/usr/bin/brave-browser-stable --incognito %U:g' /usr/share/applications/brave-browser.desktop
+cp /usr/share/applications/brave-browser.desktop /home/ubuntu/Desktop/brave-browser.desktop
