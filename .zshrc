@@ -183,6 +183,18 @@ function rname(){
     rename "s/${1}/${2}/g" *
 }
 
+function dld(){
+    while IFS= read -r url; do
+        url=$(echo "$url" | tr -d '[:space:]')  # Remove leading/trailing whitespaces
+        if [ -n "$url" ]; then
+            # Extract filename from the URL
+            filename=$(basename "$url")
+            echo "Downloading: $url to $filename"
+            aria2c -c -x 16 -s 16 -k 1M -o "$filename" "$url"
+        fi
+    done < "$1"
+}
+
 function duration(){
     for file in *.(mp4|mkv)(N); do
         echo -n $(ffprobe $file 2>&1 | grep 'Duration' | cut -d',' -f1 | cut -d' ' -f4 | cut -d'.' -f1)
