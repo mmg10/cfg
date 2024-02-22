@@ -12,5 +12,6 @@ else
     echo "conda found"
     conda init zsh
     echo 'conda activate pytorch' >> ~/.zshrc
+    sudo ln -s /opt/dlami/nvme ~/.cache/huggingface
     exit
 fi

@@ -1,5 +1,5 @@
 sudo apt update
-sudo apt install git zsh unzip xclip xsel tmux rename nfs-common tree -y
+sudo apt install git zsh unzip xclip xsel tmux rename nfs-common tree aria2 -y
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 git clone https://github.com/tmux-plugins/tmux-yank ~/.tmux/plugins/tmux-yank
 cp tmux.conf ~/.tmux.conf
@@ -10,15 +10,9 @@ machine_architecture=$(uname -m)
 if [ "$machine_architecture" == "x86_64" ]; then
     sudo curl -fsSL  https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64 -o /usr/bin/oh-my-posh
     wget https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -O awscliv2.zip
-    wget https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linux64-gpl.tar.xz
-    tar -xf ffmpeg-master-latest-linux64-gpl.tar.xz
-    sudo cp ffmpeg-master-latest-linux64-gpl/bin/* /usr/local/bin/
 else
     sudo curl -fsSL  https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-arm64 -o /usr/bin/oh-my-posh
     wget https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip -O awscliv2.zip
-    wget https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linuxarm64-gpl.tar.xz
-    tar -xf ffmpeg-master-latest-linuxarm64-gpl.tar.xz
-    sudo cp ffmpeg-master-latest-linuxarm64-gpl/bin/* /usr/local/bin/
 fi
 unzip -qq awscliv2.zip
 sudo ./aws/install -i /usr/bin/awscli
