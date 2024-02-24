@@ -13,5 +13,9 @@ else
     conda init zsh
     echo 'conda activate pytorch' >> ~/.zshrc
     sudo ln -s /opt/dlami/nvme ~/.cache/huggingface
+    sudo cp -r /var/lib/docker/ /opt/dlami/nvme
+    sudo rm -rf /var/lib/docker
+    sudo ln -s /opt/dlami/nvme/docker /var/lib/docker
+    sudo service docker restart
     exit
 fi
