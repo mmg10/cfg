@@ -14,6 +14,11 @@ fi
 if nvidia-smi; then
   echo "GPU present!"
   sudo nvidia-ctk runtime configure --runtime=docker && sudo systemctl restart docker
+  sudo cp -r /var/lib/docker/ /opt/dlami/nvme
+  echo '{
+    "data-root": "/opt/dlami/nvme/docker"
+}' | sudo tee /etc/docker/daemon.json >/dev/null
+  sudo service docker restart
 else
   echo "No GPU present!"
 fi

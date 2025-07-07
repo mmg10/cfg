@@ -61,6 +61,8 @@ sudo chsh -s /bin/zsh ubuntu
 git config --global user.name -
 git config --global user.email -
 git config --global init.defaultBranch main
+git config --global pager.log false
+git config --global core.pager delta
 #mkdir ~/workefs
 #echo "fs-08b7a28281079c1bb.efs.us-west-2.amazonaws.com:/ /home/ubuntu/workefs nfs4 nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport,_netdev 0 0" | sudo tee -a /etc/fstab
 #sudo mount -a
