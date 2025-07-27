@@ -15,7 +15,6 @@ then
     #echo 'ven default' >> ~/.zshrc
     echo 'source ~/ven/default/bin/activate' >> ~/.zshrc
     cd - > /dev/null
-    exit
 else
     echo "Running GPU machine"
     mkdir /opt/dlami/nvme/huggingface
