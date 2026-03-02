@@ -17,5 +17,6 @@ then
 else
     echo "Running GPU machine"
     mkdir /opt/dlami/nvme/huggingface
+    mkdir ~/.cache/
     ln -s /opt/dlami/nvme/huggingface ~/.cache/huggingface
 fi
