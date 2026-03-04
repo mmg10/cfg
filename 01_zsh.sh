@@ -71,3 +71,11 @@ sudo chmod 400 ~/.ssh/id_rsa1
 sudo chmod 400 ~/.ssh/id_rsa2
 mv .zshrc /home/ubuntu/.zshrc
 rm -rf setup.sh
+if ! command -v nvidia-smi &> /dev/null
+then
+    echo "Running CPU only machine"
+else
+    echo "Running GPU machine"
+    mkdir -p /opt/dlami/nvme/tmp
+    echo 'export TMPDIR=/opt/dlami/nvme/tmp' >> ~/.zshrc
+fi
