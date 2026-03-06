@@ -71,6 +71,9 @@ sudo chmod 400 ~/.ssh/id_rsa1
 sudo chmod 400 ~/.ssh/id_rsa2
 mv .zshrc /home/ubuntu/.zshrc
 rm -rf setup.sh
+curl -fsSL https://raw.githubusercontent.com/sinelaw/fresh/refs/heads/master/scripts/install.sh -o install.sh
+bash install.sh
+rm -rf install.sh
 if ! command -v nvidia-smi &> /dev/null
 then
     echo "Running CPU only machine"
