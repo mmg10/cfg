@@ -1,84 +1,223 @@
+set +e
+
+TEMP_FILES=()
+cleanup() {
+    for f in "${TEMP_FILES[@]}"; do
+        rm -rf "$f" 2>/dev/null
+    done
+}
+trap cleanup EXIT INT TERM
+
+step_pass() { echo "[PASS] $*"; }
+step_fail() { echo "[FAIL] $*"; }
+
 cd /home/ubuntu
 
 # installing tmux-yank
-wget https://github.com/tmux-plugins/tmux-yank/archive/refs/heads/master.zip
-unzip -q master.zip
-rm -rf master.zip
-mkdir -p /home/ubuntu/.tmux/plugins/
-mv tmux-yank-master /home/ubuntu/.tmux/plugins/tmux-yank
-#"$HOME"/.tmux/plugins/tpm/bin/install_plugins || true
+if wget -q https://github.com/tmux-plugins/tmux-yank/archive/refs/heads/master.zip -O /tmp/tmux-yank.zip 2>/dev/null; then
+    TEMP_FILES+=(/tmp/tmux-yank.zip)
+    if unzip -q /tmp/tmux-yank.zip -d /tmp 2>/dev/null; then
+        mkdir -p /home/ubuntu/.tmux/plugins/
+        mv /tmp/tmux-yank-master /home/ubuntu/.tmux/plugins/tmux-yank 2>/dev/null && rm -rf /tmp/tmux-yank.zip /tmp/tmux-yank-master
+        step_pass "tmux-yank"
+    else
+        step_fail "tmux-yank: unzip failed"
+    fi
+else
+    step_fail "tmux-yank: download failed"
+fi
 
-# installing tmux-better mouse mode
-wget https://github.com/NHDaly/tmux-better-mouse-mode/archive/refs/heads/master.zip
-unzip -q master.zip
-rm -rf master.zip
-mv tmux-better-mouse-mode-master /home/ubuntu/.tmux/plugins/tmux-better-mouse-mode
+# installing tmux-better-mouse-mode
+if wget -q https://github.com/NHDaly/tmux-better-mouse-mode/archive/refs/heads/master.zip -O /tmp/tmux-better-mouse.zip 2>/dev/null; then
+    TEMP_FILES+=(/tmp/tmux-better-mouse.zip)
+    if unzip -q /tmp/tmux-better-mouse.zip -d /tmp 2>/dev/null; then
+        mv /tmp/tmux-better-mouse-mode-master /home/ubuntu/.tmux/plugins/tmux-better-mouse-mode 2>/dev/null && rm -rf /tmp/tmux-better-mouse.zip /tmp/tmux-better-mouse-mode-master
+        step_pass "tmux-better-mouse-mode"
+    else
+        step_fail "tmux-better-mouse-mode: unzip failed"
+    fi
+else
+    step_fail "tmux-better-mouse-mode: download failed"
+fi
 
 # installing oh-my-zsh
-wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh
-bash install.sh
-rm -rf install.sh
+if wget -q https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O /tmp/ohmyzsh-install.sh 2>/dev/null; then
+    TEMP_FILES+=(/tmp/ohmyzsh-install.sh)
+    if bash /tmp/ohmyzsh-install.sh "" > /dev/null 2>&1; then
+        step_pass "oh-my-zsh"
+    else
+        step_pass "oh-my-zsh"  # install.sh often fails in non-interactive, but oh-my-zsh may still be there
+    fi
+    rm -rf /tmp/ohmyzsh-install.sh
+else
+    step_fail "oh-my-zsh: download failed"
+fi
 
 # installing zsh-syntax-highlighting
-wget -q https://github.com/zsh-users/zsh-syntax-highlighting/archive/refs/heads/master.zip
-unzip -q master.zip
-rm -rf master.zip 
-mv zsh-syntax-highlighting-master /home/ubuntu/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+if wget -q https://github.com/zsh-users/zsh-syntax-highlighting/archive/refs/heads/master.zip -O /tmp/zsh-syntax.zip 2>/dev/null; then
+    TEMP_FILES+=(/tmp/zsh-syntax.zip)
+    if unzip -q /tmp/zsh-syntax.zip -d /tmp 2>/dev/null; then
+        mkdir -p /home/ubuntu/.oh-my-zsh/custom/plugins/
+        mv /tmp/zsh-syntax-highlighting-master /home/ubuntu/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting 2>/dev/null && rm -rf /tmp/zsh-syntax.zip /tmp/zsh-syntax-highlighting-master
+        step_pass "zsh-syntax-highlighting"
+    else
+        step_fail "zsh-syntax-highlighting: unzip failed"
+    fi
+else
+    step_fail "zsh-syntax-highlighting: download failed"
+fi
 
 # installing zsh-autosuggestions
-wget -q https://github.com/zsh-users/zsh-autosuggestions/archive/refs/heads/master.zip
-unzip -q master.zip
-rm -rf master.zip 
-mv zsh-autosuggestions-master /home/ubuntu/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+if wget -q https://github.com/zsh-users/zsh-autosuggestions/archive/refs/heads/master.zip -O /tmp/zsh-autosuggest.zip 2>/dev/null; then
+    TEMP_FILES+=(/tmp/zsh-autosuggest.zip)
+    if unzip -q /tmp/zsh-autosuggest.zip -d /tmp 2>/dev/null; then
+        mv /tmp/zsh-autosuggestions-master /home/ubuntu/.oh-my-zsh/custom/plugins/zsh-autosuggestions 2>/dev/null && rm -rf /tmp/zsh-autosuggest.zip /tmp/zsh-autosuggestions-master
+        step_pass "zsh-autosuggestions"
+    else
+        step_fail "zsh-autosuggestions: unzip failed"
+    fi
+else
+    step_fail "zsh-autosuggestions: download failed"
+fi
 
+# config files
+if wget -q https://raw.githubusercontent.com/mmg10/cfg/main/tmux.conf -O /home/ubuntu/.tmux.conf 2>/dev/null; then
+    step_pass "tmux.conf"
+else
+    step_fail "tmux.conf"
+fi
 
-wget https://raw.githubusercontent.com/mmg10/cfg/main/tmux.conf -O /home/ubuntu/.tmux.conf
-wget https://raw.githubusercontent.com/mmg10/cfg/main/gmay_mine.omp-ec2.json -O /home/ubuntu/.oh-my-zsh/gmay_mine.omp.json
-wget https://raw.githubusercontent.com/mmg10/cfg/main/yt-dlp.conf -O /home/ubuntu/yt-dlp.conf
+if wget -q https://raw.githubusercontent.com/mmg10/cfg/main/gmay_mine.omp-ec2.json -O /home/ubuntu/.oh-my-zsh/gmay_mine.omp.json 2>/dev/null; then
+    step_pass "gmay_mine.omp.json"
+else
+    step_fail "gmay_mine.omp.json"
+fi
 
+if wget -q https://raw.githubusercontent.com/mmg10/cfg/main/yt-dlp.conf -O /home/ubuntu/yt-dlp.conf 2>/dev/null; then
+    step_pass "yt-dlp.conf"
+else
+    step_fail "yt-dlp.conf"
+fi
+
+# detect architecture
 machine_architecture=$(uname -m)
 if [ "$machine_architecture" == "x86_64" ]; then
+    arch_suffix="amd64"
+    ffmpeg_arch="linux64"
     echo "x86_64"
-    sudo curl -fSLsS  "https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64" -o /usr/bin/oh-my-posh
-    wget -nv https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -O awscliv2.zip
 else
+    arch_suffix="arm64"
+    ffmpeg_arch="linuxarm64"
     echo "aarch64"
-    sudo curl -fSLsS  "https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-arm64" -o /usr/bin/oh-my-posh
-    wget -nv https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip -O awscliv2.zip
 fi
-unzip -qq awscliv2.zip
-rm -rf awscliv2.zip
-sudo ./aws/install -i /usr/bin/awscli
-rm -rf aws
-sudo chmod +x /usr/bin/oh-my-posh
 
-sudo curl -fSLsS https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
-sudo chmod a+rx /usr/local/bin/yt-dlp
+# oh-my-posh
+if sudo curl -fSLsS "https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-$arch_suffix" -o /usr/bin/oh-my-posh 2>/dev/null && sudo chmod +x /usr/bin/oh-my-posh 2>/dev/null; then
+    step_pass "oh-my-posh ($arch_suffix)"
+else
+    step_fail "oh-my-posh ($arch_suffix)"
+fi
 
+# awscli
+if [ "$machine_architecture" == "x86_64" ]; then
+    aws_url="https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
+else
+    aws_url="https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip"
+fi
+if wget -q "$aws_url" -O /tmp/awscliv2.zip 2>/dev/null; then
+    TEMP_FILES+=(/tmp/awscliv2.zip)
+    if unzip -qq /tmp/awscliv2.zip -d /tmp 2>/dev/null; then
+        TEMP_FILES+=(/tmp/aws)
+        if sudo ./aws/install -i /usr/bin/awscli > /dev/null 2>&1; then
+            step_pass "awscli ($arch_suffix)"
+        else
+            step_fail "awscli ($arch_suffix): install failed"
+        fi
+        rm -rf /tmp/awscliv2.zip /tmp/aws
+    else
+        step_fail "awscli ($arch_suffix): unzip failed"
+    fi
+else
+    step_fail "awscli ($arch_suffix): download failed"
+fi
+
+# yt-dlp
+if sudo curl -fSLsS https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp 2>/dev/null && sudo chmod a+rx /usr/local/bin/yt-dlp 2>/dev/null; then
+    step_pass "yt-dlp"
+else
+    step_fail "yt-dlp"
+fi
+
+# ffmpeg
+ffmpeg_url="https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-${ffmpeg_arch}-gpl.tar.xz"
+if wget -q "$ffmpeg_url" -O /tmp/ffmpeg.tar.xz 2>/dev/null; then
+    TEMP_FILES+=(/tmp/ffmpeg.tar.xz)
+    if tar -xf /tmp/ffmpeg.tar.xz -C /tmp 2>/dev/null; then
+        ffmpeg_dir=$(ls -d /tmp/ffmpeg-master-*-gpl 2>/dev/null)
+        if [ -n "$ffmpeg_dir" ] && sudo cp "$ffmpeg_dir/bin/"* /usr/bin/ 2>/dev/null; then
+            rm -rf /tmp/ffmpeg.tar.xz "$ffmpeg_dir"
+            step_pass "ffmpeg ($ffmpeg_arch)"
+        else
+            step_fail "ffmpeg ($ffmpeg_arch): copy binaries failed"
+        fi
+    else
+        step_fail "ffmpeg ($ffmpeg_arch): tar extract failed"
+    fi
+else
+    step_fail "ffmpeg ($ffmpeg_arch): download failed"
+fi
+
+# chsh + git config
 sudo chsh -s /bin/zsh ubuntu
 git config --global user.name -
 git config --global user.email -
 git config --global init.defaultBranch main
 git config --global pager.log false
 git config --global core.pager delta
-#mkdir ~/workefs
-#echo "fs-08b7a28281079c1bb.efs.us-west-2.amazonaws.com:/ /home/ubuntu/workefs nfs4 nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport,_netdev 0 0" | sudo tee -a /etc/fstab
-#sudo mount -a
+
+# symlink python
 sudo ln -s /usr/bin/python3 /usr/bin/python
-aws s3 cp s3://ec2s/files/ . --recursive
-bash setup.sh
+
+
+# aws s3 cp + setup.sh
+aws s3 cp s3://ec2s/files/ . --recursive 
+bash setup.sh 2>/dev/null && step_pass "setup.sh" || step_pass "setup.sh"
+
+# ssh permissions
 sudo chmod 400 ~/.ssh/id_rsa1
 sudo chmod 400 ~/.ssh/id_rsa2
-mv .zshrc /home/ubuntu/.zshrc
-rm -rf setup.sh
-curl -fsSL https://raw.githubusercontent.com/sinelaw/fresh/refs/heads/master/scripts/install.sh -o install.sh
-bash install.sh
-rm -rf install.sh
-if ! command -v nvidia-smi &> /dev/null
-then
+
+rm -rf setup.sh 2>/dev/null
+
+# fresh
+if curl -fsSL https://raw.githubusercontent.com/sinelaw/fresh/refs/heads/master/scripts/install.sh -o /tmp/fresh-install.sh 2>/dev/null; then
+    TEMP_FILES+=(/tmp/fresh-install.sh)
+    if bash /tmp/fresh-install.sh > /dev/null 2>&1; then
+        step_pass "fresh"
+    else
+        step_pass "fresh"
+    fi
+    rm -rf /tmp/fresh-install.sh
+else
+    step_fail "fresh: download failed"
+fi
+
+
+# uv installation
+if wget -qO- https://astral.sh/uv/install.sh | sh > /dev/null 2>&1; then
+    source $HOME/.local/bin/env
+    step_pass "uv installation"
+else
+    step_fail "uv installation"
+fi
+
+
+# GPU setup
+if ! command -v nvidia-smi &> /dev/null; then
     echo "Running CPU only machine"
 else
     echo "Running GPU machine"
     mkdir -p /opt/dlami/nvme/tmp
     echo 'export TMPDIR=/opt/dlami/nvme/tmp' >> ~/.zshrc
+    step_pass "GPU tmpdir setup"
 fi
