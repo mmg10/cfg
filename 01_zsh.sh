@@ -128,7 +128,7 @@ if wget -q "$aws_url" -O /tmp/awscliv2.zip 2>/dev/null; then
     TEMP_FILES+=(/tmp/awscliv2.zip)
     if unzip -qq /tmp/awscliv2.zip -d /tmp 2>/dev/null; then
         TEMP_FILES+=(/tmp/aws)
-        if sudo ./aws/install -i /usr/bin/awscli > /dev/null 2>&1; then
+        if (cd /tmp && sudo ./aws/install -i /usr/bin/awscli) > /dev/null 2>&1; then
             step_pass "awscli ($arch_suffix)"
         else
             step_fail "awscli ($arch_suffix): install failed"
@@ -215,9 +215,25 @@ fi
 # GPU setup
 if ! command -v nvidia-smi &> /dev/null; then
     echo "Running CPU only machine"
+    mkdir -p ~/ven/default
+    cd ~/ven/default
+    uv venv > /dev/null 2>&1 || { step_fail "CPU venv setup"; exit 1; }
+    uv init . > /dev/null 2>&1 || { step_fail "CPU venv setup"; exit 1; }
+    mv .venv/* .
+    rm -rf .venv
+    ln -s ~/ven/default .venv
+    source bin/activate
+    uv add --no-cache-dir pip
+    step_pass "CPU venv setup"
+    cd - > /dev/null
 else
     echo "Running GPU machine"
     mkdir -p /opt/dlami/nvme/tmp
     echo 'export TMPDIR=/opt/dlami/nvme/tmp' >> ~/.zshrc
     step_pass "GPU tmpdir setup"
+    if mkdir -p /opt/dlami/nvme/huggingface && mkdir -p ~/.cache/ && ln -sf /opt/dlami/nvme/huggingface ~/.cache/huggingface 2>/dev/null; then
+        step_pass "GPU huggingface cache setup"
+    else
+        step_fail "GPU huggingface cache setup"
+    fi
 fi
