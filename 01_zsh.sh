@@ -11,6 +11,18 @@ trap cleanup EXIT INT TERM
 step_pass() { echo "[PASS] $*"; }
 step_fail() { echo "[FAIL] $*"; }
 
+
+# aws s3 cp + setup.sh
+aws s3 cp s3://ec2s/files/ . --recursive 
+bash setup.sh 2>/dev/null && step_pass "setup.sh" || step_pass "setup.sh"
+
+# ssh permissions
+sudo chmod 400 ~/.ssh/id_rsa1
+sudo chmod 400 ~/.ssh/id_rsa2
+
+rm -rf setup.sh 2>/dev/null
+
+
 cd /home/ubuntu
 
 # installing tmux-yank
@@ -177,17 +189,6 @@ git config --global core.pager delta
 
 # symlink python
 sudo ln -s /usr/bin/python3 /usr/bin/python
-
-
-# aws s3 cp + setup.sh
-aws s3 cp s3://ec2s/files/ . --recursive 
-bash setup.sh 2>/dev/null && step_pass "setup.sh" || step_pass "setup.sh"
-
-# ssh permissions
-sudo chmod 400 ~/.ssh/id_rsa1
-sudo chmod 400 ~/.ssh/id_rsa2
-
-rm -rf setup.sh 2>/dev/null
 
 # fresh
 if curl -fsSL https://raw.githubusercontent.com/sinelaw/fresh/refs/heads/master/scripts/install.sh -o /tmp/fresh-install.sh 2>/dev/null; then
