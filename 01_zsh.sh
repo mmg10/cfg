@@ -60,6 +60,23 @@ rm -rf setup.sh 2>/dev/null
 
 cd /home/ubuntu
 
+# installing delta
+
+VERSION=$(curl -s https://api.github.com/repos/dandavison/delta/releases/latest | jq -r .tag_name)
+if [ -n "${VERSION}" ] && [ "${VERSION}" != "null" ]; then
+    DELTA_DEB="./git-delta.deb"
+    DELTA_URL="https://github.com/dandavison/delta/releases/download/${VERSION}/git-delta_${VERSION#v}_amd64.deb"
+
+    if wget -q "${DELTA_URL}" -O "${DELTA_DEB}" 2>/dev/null; then
+        TEMP_FILES+=("${DELTA_DEB}")
+       
+    else
+        step_fail "git-delta: download failed"
+    fi
+else
+    step_fail "git-delta: failed to resolve latest release"
+fi
+
 # installing tmux-yank
 if wget -q https://github.com/tmux-plugins/tmux-yank/archive/refs/heads/master.zip -O /tmp/tmux-yank.zip 2>/dev/null; then
     TEMP_FILES+=(/tmp/tmux-yank.zip)
@@ -189,6 +206,9 @@ git config --global user.email -
 git config --global init.defaultBranch main
 git config --global pager.log false
 git config --global core.pager delta
+git config --global delta.line-numbers true
+git config --global delta.side-by-side true
+#git config --global core.pager "less -F"
 
 # symlink python
 sudo ln -s /usr/bin/python3 /usr/bin/python
