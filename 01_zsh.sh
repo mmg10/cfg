@@ -144,6 +144,13 @@ else
     step_fail "zsh-autosuggestions: download failed"
 fi
 
+# .zshrc setup
+if mv -f zshrc ~/.zshrc 2>/dev/null; then
+    step_pass "zshrc"
+else
+    step_fail "zshrc"
+fi
+
 # config files
 if wget -q https://raw.githubusercontent.com/mmg10/cfg/main/tmux.conf -O /home/ubuntu/.tmux.conf 2>/dev/null; then
     step_pass "tmux.conf"
