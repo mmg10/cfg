@@ -4,15 +4,15 @@ LOGFILE="/home/ubuntu/user-data.log"
 exec > >(tee -a "$LOGFILE") 2>&1
 echo "[INFO] Starting user data setup at $(date)"
 
+apt update > /dev/null 2>&1
+apt install -y git zsh unzip xclip xsel tmux rename nfs-common tree aria2 btop jq > /dev/null 2>&1
+
 # ssh.sh
 if sudo -H -u ubuntu bash -c 'cd ~ && wget -q -O ssh.sh https://raw.githubusercontent.com/mmg10/cfg/main/ssh.sh && bash ssh.sh && rm -rf ssh.sh'; then
     echo "[PASS] ssh.sh"
 else
     echo "[FAIL] ssh.sh"
 fi
-
-apt update > /dev/null 2>&1
-apt install -y git zsh unzip xclip xsel tmux rename nfs-common tree aria2 btop jq > /dev/null 2>&1
 
 # 01_zsh.sh
 if sudo -H -u ubuntu bash -c 'cd ~ && wget -q -O 01_zsh.sh https://raw.githubusercontent.com/mmg10/cfg/main/01_zsh.sh && bash 01_zsh.sh && rm -f 01_zsh.sh'; then
@@ -26,4 +26,8 @@ if sudo -H -u ubuntu bash -c 'cd ~ && wget -q -O 04_docker.sh https://raw.github
 else
     echo "[FAIL] 04_docker.sh"
 fi
+
+sudo -H -u ubuntu bash -c 'cd ~ && wget -q -O minikube_k8s.sh https://raw.githubusercontent.com/mmg10/cfg/main/minikube_k8s.sh' 
+sudo -H -u ubuntu bash -c 'cd ~ && wget -q -O k8s_tools.sh https://raw.githubusercontent.com/mmg10/cfg/main/k8s_tools.sh' 
+
 echo "User data script completed at $(date)"
