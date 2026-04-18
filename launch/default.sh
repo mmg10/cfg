@@ -5,7 +5,7 @@ exec > >(tee -a "$LOGFILE") 2>&1
 echo "[INFO] Starting user data setup at $(date)"
 
 apt update > /dev/null 2>&1
-apt install -y git zsh unzip xclip xsel tmux rename nfs-common tree aria2 btop jq > /dev/null 2>&1
+apt install -y curl git zsh unzip xclip xsel tmux rename nfs-common tree aria2 btop jq > /dev/null 2>&1
 
 # ssh.sh
 if sudo -H -u ubuntu bash -c 'cd ~ && wget -q -O ssh.sh https://raw.githubusercontent.com/mmg10/cfg/main/ssh.sh && bash ssh.sh && rm -rf ssh.sh'; then
