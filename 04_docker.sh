@@ -60,8 +60,8 @@ if command -v nvidia-smi &> /dev/null; then
     sudo touch /etc/docker/daemon.json
     mkdir -p /opt/dlami/nvme/containerd/root
     mkdir -p /opt/dlami/nvme/containerd/state
-    sed -i 's|^#\?root = .*|root = "/opt/dlami/nvme/containerd/root"|' /etc/containerd/config.toml
-    sed -i 's|^#\?state = .*|state = "/opt/dlami/nvme/containerd/state"|' /etc/containerd/config.toml
+    sudo sed -i 's|^#\?root = .*|root = "/opt/dlami/nvme/containerd/root"|' /etc/containerd/config.toml
+    sudo sed -i 's|^#\?state = .*|state = "/opt/dlami/nvme/containerd/state"|' /etc/containerd/config.toml
 
     if sudo jq '."data-root" = "/opt/dlami/nvme/docker"' /etc/docker/daemon.json | sudo tee /etc/docker/daemon.json.tmp > /dev/null 2>&1 && sudo mv /etc/docker/daemon.json.tmp /etc/docker/daemon.json 2>/dev/null; then
         step_pass "docker data-root config"
