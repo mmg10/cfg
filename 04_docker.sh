@@ -38,6 +38,11 @@ if command -v nvidia-smi &> /dev/null; then
     else
         step_fail "docker stopped"
     fi
+     if sudo systemctl stop containerd > /dev/null 2>&1; then
+        step_pass "containerd stopped"
+    else
+        step_fail "containerd stopped"
+    fi
     if sudo nvidia-ctk runtime configure --runtime=docker > /dev/null 2>&1 && sudo systemctl restart docker > /dev/null 2>&1; then
         step_pass "nvidia-ctk docker runtime"
     else
@@ -53,6 +58,10 @@ if command -v nvidia-smi &> /dev/null; then
     # Ensure daemon.json exists and configure data-root
     sudo mkdir -p /etc/docker
     sudo touch /etc/docker/daemon.json
+    mkdir -p /opt/dlami/nvme/containerd/root
+    mkdir -p /opt/dlami/nvme/containerd/state
+    sed -i 's|^#\?root = .*|root = "/opt/dlami/nvme/containerd/root"|' /etc/containerd/config.toml
+    sed -i 's|^#\?state = .*|state = "/opt/dlami/nvme/containerd/state"|' /etc/containerd/config.toml
 
     if sudo jq '."data-root" = "/opt/dlami/nvme/docker"' /etc/docker/daemon.json | sudo tee /etc/docker/daemon.json.tmp > /dev/null 2>&1 && sudo mv /etc/docker/daemon.json.tmp /etc/docker/daemon.json 2>/dev/null; then
         step_pass "docker data-root config"
@@ -65,6 +74,20 @@ if command -v nvidia-smi &> /dev/null; then
     else
         step_fail "docker restart"
     fi
+    
+    sudo systemctl daemon-reexec
+    if sudo systemctl enable containerd > /dev/null 2>&1; then
+        step_pass "containerd enabled"
+    else
+        step_fail "containerd enabled"
+    fi
+    
+    if sudo systemctl restart containerd > /dev/null 2>&1; then
+        step_pass "containerd restart"
+    else
+        step_fail "containerd restart"
+    fi
+    
 else
     echo "No GPU present!"
 fi
