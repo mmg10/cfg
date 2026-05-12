@@ -33,6 +33,11 @@ fi
 
 if command -v nvidia-smi &> /dev/null; then
     echo "GPU present!"
+     if sudo systemctl stop docker > /dev/null 2>&1; then
+        step_pass "docker stopped"
+    else
+        step_fail "docker stopped"
+    fi
     if sudo nvidia-ctk runtime configure --runtime=docker > /dev/null 2>&1 && sudo systemctl restart docker > /dev/null 2>&1; then
         step_pass "nvidia-ctk docker runtime"
     else
