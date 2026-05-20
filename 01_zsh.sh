@@ -228,7 +228,7 @@ else
     mkdir -p /opt/dlami/nvme/tmp
     echo 'export TMPDIR=/opt/dlami/nvme/tmp' >> ~/.zshrc
     step_pass "GPU tmpdir setup"
-    if mkdir -p /opt/dlami/nvme/huggingface && mkdir -p ~/.cache/ && ln -sf /opt/dlami/nvme/huggingface ~/.cache/huggingface 2>/dev/null; then
+    if mkdir -p /opt/dlami/nvme/huggingface && mkdir -p ~/.cache/ && ln -sfn /opt/dlami/nvme/huggingface ~/.cache/huggingface 2>/dev/null; then
         step_pass "GPU huggingface cache setup"
     else
         step_fail "GPU huggingface cache setup"
