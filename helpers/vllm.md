@@ -28,3 +28,23 @@ curl http://localhost:8000/v1/chat/completions \
             {"role": "user", "content": "Who won the world series in 2020?"}
         ]
     }'
+    
+# once added to litellm, test via
+
+curl http://localhost:4001/v1/embeddings \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer sk-1234" \
+  -d '{
+    "model": "Qwen/Qwen3-Embedding-0.6B",
+    "input": "Hello world"
+  }'
+
+
+curl http://localhost:4001/v1/embeddings \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer sk-1234" \
+  -d '{
+    "model": "qwen-embedding",
+    "input": "Hello world"
+  }'
+
