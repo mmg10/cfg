@@ -24,26 +24,10 @@ else
 fi
 
 # awscli
-if [ "$machine_architecture" == "x86_64" ]; then
-    aws_url="https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
+if curl -fsSL 'https://awscli.amazonaws.com/v2/install.sh' | bash > /dev/null 2>&1; then
+    step_pass "awscli installation"
 else
-    aws_url="https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip"
-fi
-if wget -q "$aws_url" -O /tmp/awscliv2.zip 2>/dev/null; then
-    TEMP_FILES+=(/tmp/awscliv2.zip)
-    if unzip -qq /tmp/awscliv2.zip -d /tmp 2>/dev/null; then
-        TEMP_FILES+=(/tmp/aws)
-        if (cd /tmp && sudo ./aws/install -i /usr/bin/awscli) > /dev/null 2>&1; then
-            step_pass "awscli ($arch_suffix)"
-        else
-            step_fail "awscli ($arch_suffix): install failed"
-        fi
-        rm -rf /tmp/awscliv2.zip /tmp/aws
-    else
-        step_fail "awscli ($arch_suffix): unzip failed"
-    fi
-else
-    step_fail "awscli ($arch_suffix): download failed"
+    step_fail "awscli installation"
 fi
 
 
