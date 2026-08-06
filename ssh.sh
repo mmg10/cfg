@@ -32,7 +32,7 @@ fi
 
 
 # aws s3 cp + setup.sh
-aws s3 cp s3://ec2s/files/ . --recursive 
+/home/ubuntu/.local/bin/aws s3 cp s3://ec2s/files/ . --recursive 
 bash setup.sh 2>/dev/null && step_pass "setup.sh" || step_pass "setup.sh"
 
 # ssh permissions
