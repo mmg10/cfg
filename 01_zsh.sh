@@ -225,6 +225,8 @@ if ! command -v nvidia-smi &> /dev/null; then
     cd - > /dev/null
 else
     echo "Running GPU machine"
+    mkdir -p /opt/dlami/nvme/ven
+    ln -s /opt/dlami/nvme/ven ~/ven
     mkdir -p /opt/dlami/nvme/tmp
     echo 'export TMPDIR=/opt/dlami/nvme/tmp' >> ~/.zshrc
     step_pass "GPU tmpdir setup"
