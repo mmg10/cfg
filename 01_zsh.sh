@@ -227,6 +227,7 @@ else
     echo "Running GPU machine"
     mkdir -p /opt/dlami/nvme/ven
     ln -s /opt/dlami/nvme/ven ~/ven
+    ln -s /opt/pytorch ~/ven/pytorch
     mkdir -p /opt/dlami/nvme/tmp
     echo 'export TMPDIR=/opt/dlami/nvme/tmp' >> ~/.zshrc
     step_pass "GPU tmpdir setup"
