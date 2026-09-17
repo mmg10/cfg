@@ -136,6 +136,11 @@ else
     step_fail "yt-dlp.conf"
 fi
 
+if mkdir -p /home/ubuntu/.config/git && wget -q https://raw.githubusercontent.com/mmg10/cfg/main/gitignore -O /home/ubuntu/.config/git/ignore 2>/dev/null; then
+    step_pass "git ignore"
+else
+    step_fail "git ignore"
+fi
 
 # oh-my-posh
 if sudo curl -fSLsS "https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-$arch_suffix" -o /usr/bin/oh-my-posh 2>/dev/null && sudo chmod +x /usr/bin/oh-my-posh 2>/dev/null; then
@@ -178,9 +183,9 @@ git config --global user.name -
 git config --global user.email -
 git config --global init.defaultBranch main
 git config --global pager.log false
-git config --global core.pager delta
-git config --global delta.line-numbers true
-git config --global delta.side-by-side true
+#git config --global core.pager delta
+#git config --global delta.line-numbers true
+#git config --global delta.side-by-side true
 #git config --global core.pager "less -F"
 
 # symlink python
