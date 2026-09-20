@@ -220,7 +220,7 @@ if ! command -v nvidia-smi &> /dev/null; then
     mkdir -p ~/ven
 else
     echo "Running GPU machine"
-    mkdir -p /opt/dlami/nvme/ven
+    mkdir -p /opt/dlami/nvme/ven/cache
     ln -s /opt/dlami/nvme/ven ~/ven
     [ -d /opt/pytorch ] && ln -s /opt/pytorch ~/ven/pytorch
     mkdir -p /opt/dlami/nvme/tmp
