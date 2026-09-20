@@ -217,22 +217,12 @@ fi
 # GPU setup
 if ! command -v nvidia-smi &> /dev/null; then
     echo "Running CPU only machine"
-    mkdir -p ~/ven/default
-    cd ~/ven/default
-    uv venv > /dev/null 2>&1 || { step_fail "CPU venv setup"; exit 1; }
-    uv init . > /dev/null 2>&1 || { step_fail "CPU venv setup"; exit 1; }
-    mv .venv/* .
-    rm -rf .venv
-    ln -s ~/ven/default .venv
-    source bin/activate
-    uv add --no-cache-dir pip
-    step_pass "CPU venv setup"
-    cd - > /dev/null
+    mkdir -p ~/ven
 else
     echo "Running GPU machine"
     mkdir -p /opt/dlami/nvme/ven
     ln -s /opt/dlami/nvme/ven ~/ven
-    ln -s /opt/pytorch ~/ven/pytorch
+    [ -d /opt/pytorch ] && ln -s /opt/pytorch ~/ven/pytorch
     mkdir -p /opt/dlami/nvme/tmp
     echo 'export TMPDIR=/opt/dlami/nvme/tmp' >> ~/.zshrc
     step_pass "GPU tmpdir setup"
