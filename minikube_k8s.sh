@@ -11,7 +11,7 @@ fi
 
 
 echo "to start minikube, execute:"
-if command -v 'sudo nvidia-smi' &> /dev/null
+if command -v nvidia-smi &> /dev/null
 then
     echo "minikube start --driver docker --container-runtime docker --gpus all --memory 28672 --cpus 7 --disk-size 50g --addons=nvidia-device-plugin"
 else
