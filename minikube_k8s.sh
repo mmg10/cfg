@@ -8,7 +8,7 @@ sudo install minikube-linux-amd64 /usr/local/bin/minikube && rm -f minikube-linu
 echo "to start minikube, execute:"
 if command -v nvidia-smi &> /dev/null
 then
-    echo "minikube start --driver docker --container-runtime docker --gpus all --memory 28672 --cpus 7 --disk-size 50g --addons=nvidia-device-plugin"
+    echo "minikube start --driver docker --container-runtime docker --gpus all --memory 28672 --cpus 7 --disk-size 50g"
 else
     echo "minikube start --driver=docker --memory 28672 --cpus 8 --disk-size 30g"
 fi

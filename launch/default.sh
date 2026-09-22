@@ -27,8 +27,8 @@ else
     echo "[FAIL] 04_docker.sh"
 fi
 
-sudo -H -u ubuntu bash -c 'cd ~ && wget -q -O minikube_k8s.sh https://raw.githubusercontent.com/mmg10/cfg/main/minikube_k8s.sh' 
-sudo -H -u ubuntu bash -c 'cd ~ && wget -q -O k8s_tools.sh https://raw.githubusercontent.com/mmg10/cfg/main/k8s_tools.sh' 
+sudo -H -u ubuntu bash -c 'cd ~ && wget -q -O minikube_k8s.sh https://raw.githubusercontent.com/mmg10/cfg/main/minikube_k8s.sh && chmod +x minikube_k8s.sh'
+sudo -H -u ubuntu bash -c 'cd ~ && wget -q -O k8s_tools.sh https://raw.githubusercontent.com/mmg10/cfg/main/k8s_tools.sh && chmod +x k8s_tools.sh'
 sudo -H -u ubuntu bash -c 'cd ~ && wget -q -O vllm.md https://raw.githubusercontent.com/mmg10/cfg/main/helpers/vllm.md'
 sudo -H -u ubuntu bash -c 'cd ~ && wget -q -O dockhand.md https://raw.githubusercontent.com/mmg10/cfg/main/helpers/dockhand.md' 
 echo "User data script completed at $(date)"
