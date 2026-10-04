@@ -214,6 +214,14 @@ else
 fi
 
 
+# rclone installation
+if curl https://rclone.org/install.sh | sudo bash > /dev/null 2>&1; then
+    step_pass "rclone installation"
+else
+    step_fail "rclone installation"
+fi
+
+
 # GPU setup
 if ! command -v nvidia-smi &> /dev/null; then
     echo "Running CPU only machine"
