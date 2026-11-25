@@ -5,7 +5,7 @@ exec > >(tee -a "$LOGFILE") 2>&1
 echo "[INFO] Starting user data setup at $(date)"
 
 apt update > /dev/null 2>&1
-apt install -y curl git zsh unzip xclip xsel tmux rename nfs-common tree aria2 btop jq unrar gdebi > /dev/null 2>&1
+apt install -y curl git zsh unzip xclip xsel tmux rename nfs-common tree aria2 btop jq unrar gdebi timg > /dev/null 2>&1
 
 # ssh.sh
 if sudo -H -u ubuntu bash -c 'cd ~ && wget -q -O ssh.sh https://raw.githubusercontent.com/mmg10/cfg/main/ssh.sh && bash ssh.sh && rm -rf ssh.sh'; then
@@ -26,6 +26,30 @@ if sudo -H -u ubuntu bash -c 'cd ~ && wget -q -O 04_docker.sh https://raw.github
 else
     echo "[FAIL] 04_docker.sh"
 fi
+
+
+# multiple python versions
+if (
+    add-apt-repository -y ppa:deadsnakes/ppa &&
+    (
+        NATIVE_PYTHON=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")') &&
+        echo "Native Ubuntu Python: $NATIVE_PYTHON" &&
+        PACKAGES=() &&
+        for VERSION in 3.11 3.12 3.13 3.14; do
+            if [[ "$VERSION" == "$NATIVE_PYTHON" ]]; then
+                echo "[SKIP] Python $VERSION (native system Python)"
+                continue
+            fi
+            PACKAGES+=("python${VERSION}" "python${VERSION}-dev")
+        done &&
+        apt-get install -y "${PACKAGES[@]}"
+    )
+); then
+    echo "[PASS] Python versions installed: ${PACKAGES[*]}"
+else
+    echo "[FAIL] Python installation"
+fi
+
 
 sudo -H -u ubuntu bash -c 'cd ~ && wget -q -O minikube_k8s.sh https://raw.githubusercontent.com/mmg10/cfg/main/minikube_k8s.sh && chmod +x minikube_k8s.sh'
 sudo -H -u ubuntu bash -c 'cd ~ && wget -q -O k8s_tools.sh https://raw.githubusercontent.com/mmg10/cfg/main/k8s_tools.sh && chmod +x k8s_tools.sh'
