@@ -29,22 +29,20 @@ fi
 
 
 # multiple python versions
-if (
-    add-apt-repository -y ppa:deadsnakes/ppa &&
-    (
-        NATIVE_PYTHON=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")') &&
-        echo "Native Ubuntu Python: $NATIVE_PYTHON" &&
-        PACKAGES=() &&
-        for VERSION in 3.11 3.12 3.13 3.14; do
-            if [[ "$VERSION" == "$NATIVE_PYTHON" ]]; then
-                echo "[SKIP] Python $VERSION (native system Python)"
-                continue
-            fi
-            PACKAGES+=("python${VERSION}" "python${VERSION}-dev")
-        done &&
-        apt-get install -y "${PACKAGES[@]}"
-    )
-); then
+
+PACKAGES=()
+
+if {
+    NATIVE_PYTHON=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")') &&
+    echo "Native Ubuntu Python: $NATIVE_PYTHON" &&
+    for VERSION in 3.12 3.13 3.14 3.15; do
+        if [[ "$VERSION" == "$NATIVE_PYTHON" ]]; then
+            echo "[SKIP] Python $VERSION (native system Python)"
+            continue
+        fi
+        PACKAGES+=("python${VERSION}" "python${VERSION}-dev")
+    done &&
+}; then
     echo "[PASS] Python versions installed: ${PACKAGES[*]}"
 else
     echo "[FAIL] Python installation"
