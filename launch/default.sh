@@ -4,6 +4,7 @@ LOGFILE="/home/ubuntu/user-data.log"
 exec > >(tee -a "$LOGFILE") 2>&1
 echo "[INFO] Starting user data setup at $(date)"
 
+add-apt-repository -y ppa:deadsnakes/ppa
 apt update > /dev/null 2>&1
 apt install -y curl git zsh unzip xclip xsel tmux rename nfs-common tree aria2 btop jq unrar gdebi timg > /dev/null 2>&1
 
@@ -31,7 +32,6 @@ fi
 # multiple python versions
 
 PACKAGES=()
-
 if {
     NATIVE_PYTHON=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")') &&
     echo "Native Ubuntu Python: $NATIVE_PYTHON" &&
@@ -42,6 +42,7 @@ if {
         fi
         PACKAGES+=("python${VERSION}" "python${VERSION}-dev")
     done &&
+    apt-get install -y "${PACKAGES[@]}"
 }; then
     echo "[PASS] Python versions installed: ${PACKAGES[*]}"
 else
